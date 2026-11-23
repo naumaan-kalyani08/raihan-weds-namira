@@ -1,0 +1,62 @@
+:root {
+  /* emerald shades: near-black edges, deep body, silky highlights */
+  --green-950: #020d09;
+  --emerald-900: #052a1f;
+  --emerald-800: #0a3d2d;
+  --emerald-700: #0f5a42;
+  --emerald-600: #17795a;
+  --emerald-glow: #28b98a;
+  --gold: #d4af6a;
+  --gold-light: #f1dca7;
+  --gold-dark: #a8853f;
+  --ivory: #fbf6ea;
+  --offwhite: #f7f1e3;
+  --ink: #2b2a26;
+
+  --font-arabic: 'Amiri', 'Traditional Arabic', serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-caps: 'Cinzel', 'Cormorant Garamond', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-deco: 'Cinzel Decorative', 'Cinzel', serif;
+
+  --damask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='0.3' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath transform='rotate(0 60 60)' d='M60 56C50 46 47 32 60 16C73 32 70 46 60 56Z M60 46C56 40 55 33 60 26C65 33 64 40 60 46 M65 55C73 47 83 45 91 49C85 57 75 61 65 55Z'/%3E%3Cpath transform='rotate(90 60 60)' d='M60 56C50 46 47 32 60 16C73 32 70 46 60 56Z M60 46C56 40 55 33 60 26C65 33 64 40 60 46 M65 55C73 47 83 45 91 49C85 57 75 61 65 55Z'/%3E%3Cpath transform='rotate(180 60 60)' d='M60 56C50 46 47 32 60 16C73 32 70 46 60 56Z M60 46C56 40 55 33 60 26C65 33 64 40 60 46 M65 55C73 47 83 45 91 49C85 57 75 61 65 55Z'/%3E%3Cpath transform='rotate(270 60 60)' d='M60 56C50 46 47 32 60 16C73 32 70 46 60 56Z M60 46C56 40 55 33 60 26C65 33 64 40 60 46 M65 55C73 47 83 45 91 49C85 57 75 61 65 55Z'/%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Cpath transform='translate(0 0)' d='M0 -13L13 0L0 13L-13 0Z M0 -6L6 0L0 6L-6 0Z'/%3E%3Cpath transform='translate(120 0)' d='M0 -13L13 0L0 13L-13 0Z M0 -6L6 0L0 6L-6 0Z'/%3E%3Cpath transform='translate(0 120)' d='M0 -13L13 0L0 13L-13 0Z M0 -6L6 0L0 6L-6 0Z'/%3E%3Cpath transform='translate(120 120)' d='M0 -13L13 0L0 13L-13 0Z M0 -6L6 0L0 6L-6 0Z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--green-950);
+  color: var(--offwhite);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+/* Lenis recommended styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}

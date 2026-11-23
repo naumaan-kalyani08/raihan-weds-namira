@@ -1,0 +1,196 @@
+/* ================= Pinned zoom scenes (Nikah / Walima) ================= */
+.zs {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--green-950);
+  isolation: isolate;
+}
+.zs-bg {
+  position: absolute;
+  inset: -10%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px) brightness(0.42) saturate(1.15);
+}
+.zs-cam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+.zs-cam img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.zs-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 29, 21, 0.55), transparent 22%, transparent 75%, rgba(4, 29, 21, 0.6)),
+    radial-gradient(ellipse 85% 85% at 50% 50%, transparent 60%, rgba(4, 29, 21, 0.55));
+}
+.zs-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, rgba(6, 42, 31, 0.7), rgba(3, 22, 16, 0.88));
+}
+
+/* fairy-light twinkles laid over the picture */
+.zs-twinkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.zs-twinkles i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%;
+  background: #fff6d8;
+  box-shadow: 0 0 6px 2px rgba(255, 228, 160, 0.85);
+  animation: zsTwinkle 2s ease-in-out infinite alternate;
+}
+@keyframes zsTwinkle {
+  from {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+/* ---------- Captions ---------- */
+.zs-cap {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  translate: -50% 0;
+  width: min(92vw, 640px);
+  text-align: center;
+  pointer-events: none;
+}
+.zs:not(.zs--still) .zs-cap {
+  opacity: 0;
+}
+.zs-title {
+  top: clamp(1.25rem, 7vh, 4.5rem);
+}
+.zs-mono {
+  bottom: clamp(1.25rem, 7vh, 4rem);
+}
+.zs-couple {
+  top: clamp(1.25rem, 6vh, 4rem);
+}
+.zs-finale {
+  top: 50%;
+  translate: -50% -50%;
+  pointer-events: auto;
+}
+
+.zs-panel {
+  display: inline-block;
+  padding: 1.1rem 1.6rem 1.25rem;
+  border-radius: 18px;
+  border: 1px solid rgba(212, 175, 106, 0.55);
+  background: linear-gradient(160deg, rgba(14, 74, 55, 0.82), rgba(4, 29, 21, 0.86));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+.zs-panel p {
+  margin: 0;
+}
+.zs-eyebrow {
+  font-family: var(--font-caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.zs-eyebrow .ur {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 1.05rem;
+}
+.zs-h {
+  font-family: var(--font-script);
+  font-size: clamp(3.2rem, 12vw, 5.4rem);
+  line-height: 1.1;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.zs-sub {
+  font-style: italic;
+  font-size: clamp(1.05rem, 3.4vw, 1.25rem);
+  color: var(--offwhite);
+}
+.zs-script {
+  font-family: var(--font-script);
+  font-size: clamp(2.4rem, 9vw, 3.6rem);
+  line-height: 1.2;
+  color: var(--offwhite);
+}
+.zs-script span {
+  color: var(--gold);
+}
+.zs-arabic {
+  font-family: var(--font-arabic);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  color: var(--gold-light);
+  line-height: 1.7;
+}
+.zs-meta {
+  font-family: var(--font-caps);
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  color: var(--gold-light);
+  margin-top: 0.35rem !important;
+}
+.zs-quote {
+  font-style: italic;
+  font-size: clamp(1.1rem, 3.6vw, 1.35rem);
+  line-height: 1.55;
+  color: var(--offwhite);
+  margin: 0.4rem 0 !important;
+}
+.zs-finale .zs-panel {
+  padding: 2rem 1.75rem;
+}
+
+/* ---------- Reduced motion: a still picture with its words beneath ---------- */
+.zs--still {
+  height: auto;
+  padding-bottom: 2rem;
+}
+.zs--still .zs-cam {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.zs--still .zs-cam img {
+  height: auto;
+}
+.zs--still .zs-bg,
+.zs--still .zs-vignette,
+.zs--still .zs-shade,
+.zs--still .zs-mono,
+.zs--still .zs-couple {
+  display: none;
+}
+.zs--still .zs-cap {
+  position: relative;
+  inset: auto;
+  translate: none;
+  margin: 1.5rem auto 0;
+}
