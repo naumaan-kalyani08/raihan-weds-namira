@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import Lenis from 'lenis'
 import Envelope from './components/Envelope'
 import ZoomScene from './components/ZoomScene'
 import Silk from './components/Silk'
+import { confetti } from './components/confetti'
+import { GUEST, IS_TOUCH, playOnce, revealAll, useSmoothScroll } from './lib/motion'
+import { RECEPTION_IMAGE as RECEPTION, RECEPTION_TWINKLES } from './lib/images'
 import './App.css'
-
-gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 /* ------------------------------------------------------------------
  *  Edit the details below. Anything marked TODO is a placeholder.
@@ -17,39 +16,42 @@ const EVENT = {
   groom: 'Raihan',
   bride: 'Namira',
 
-  // 19 December 2026, 7:00 PM local time (TODO: confirm the time)
-  start: new Date(2026, 11, 19, 19, 0),
-  end: new Date(2026, 11, 19, 23, 0),
-  time: 'Shaam 7 baje',
-  timeEn: '7:00 PM onwards',
+  // Saturday, 19 December 2026 — dinner from 8:00 PM
+  start: new Date(2026, 11, 19, 20, 0),
+  end: new Date(2026, 11, 19, 23, 30),
+  time: '8:00 PM onwards',
+  timeEn: 'Dinner from 8:00 PM',
 
-  venue: 'Raihan Heights',
-  venueAddress: 'Surat',
+  venue: 'Rooftop, Raihan Heights',
+  venueAddress: 'Opposite Ryan International School, Near Kotyarknagar, Adajan Patia, Surat',
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Raihan+Heights+by+Zaha+Luxury+Surat',
   mapsEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.683510375359!2d72.80062507388212!3d21.20472798171392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04d5a559029ef%3A0x575ea014abac466f!2sRaihan%20Heights%20by%20Zaha%20Luxury!5e0!3m2!1sen!2sin!4v1795358216027!5m2!1sen!2sin',
 
-  hosts: 'Naeem Qureshi & Sehnaaz Qureshi',
+  hosts: 'Mrs. Shehnaz & Mr. Naeem Qureshi',
+  elders: 'Mr. Mohammad Bashir Qureshi & Mrs. Hafiza Qureshi',
+  brideParents: 'Mrs. Nargis & Mr. Amin Kalyani',
+  family: 'The Qureshi Family',
 
   families: {
     groom: {
-      side: 'Dulhe Ke Ahl-e-Khana',
+      side: "The Groom's Family",
       groups: [
-        { title: 'Dada · Dadi', people: ['Basir Qureshi', 'Hafiza Qureshi'] },
-        { title: 'Walid · Walida', people: ['Naeem Qureshi', 'Sehnaaz Qureshi'] },
+        { title: 'Grandparents', people: ['Mr. Mohammad Bashir Qureshi', 'Mrs. Hafiza Qureshi'] },
+        { title: 'Parents', people: ['Mr. Naeem Qureshi', 'Mrs. Shehnaz Qureshi'] },
       ],
     },
     bride: {
-      side: 'Dulhan Ke Ahl-e-Khana',
+      side: "The Bride's Family",
       groups: [
         {
-          title: 'Dada · Dadi',
+          title: 'Grandparents',
           people: [
-            { name: 'Mehboob Kalyani', mark: 'Marhoom' },
-            { name: 'Hanifa Kalyani', mark: 'Marhooma' },
+            { name: 'Mr. Mehboob Kalyani', mark: 'Late' },
+            { name: 'Mrs. Hanifa Kalyani', mark: 'Late' },
           ],
         },
-        { title: 'Walid · Walida', people: ['Amin M Kalyani', 'Nargis Amin Kalyani'] },
+        { title: 'Parents', people: ['Mr. Amin Kalyani', 'Mrs. Nargis Kalyani'] },
       ],
     },
   },
@@ -88,7 +90,7 @@ function downloadIcs() {
     `DTSTART:${fmt(EVENT.start)}`,
     `DTEND:${fmt(EVENT.end)}`,
     `SUMMARY:Dawat-e-Walima - ${EVENT.groom} & ${EVENT.bride}`,
-    `LOCATION:${EVENT.venue}, ${EVENT.venueAddress}`,
+    `LOCATION:${`${EVENT.venue}, ${EVENT.venueAddress}`.replaceAll(',', '\\,')}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n')
@@ -131,7 +133,7 @@ function Lantern({ className }) {
       <path d="M22 40 h16 l4 10 h-24 z" fill="currentColor" />
       <path
         d="M18 50 h24 q8 25 0 60 h-24 q-8 -35 0 -60 z"
-        fill="rgba(241,220,167,0.12)"
+        fill="rgba(236,216,162,0.12)"
         stroke="currentColor"
         strokeWidth="2"
       />
@@ -181,30 +183,6 @@ const NIKAH_PORTRAIT = {
   couple: { x: 0.51, y: 0.76, span: 0.44, wspan: 0.78 },
   alt: NIKAH_LANDSCAPE.alt,
 }
-const RECEPTION = {
-  src: '/images/reception-1672.webp',
-  srcSet: '/images/reception-900.webp 900w, /images/reception-1672.webp 1672w',
-  sizes: '(max-width: 700px) 1672px, 100vw',
-  blur: '/images/reception-blur.webp',
-  w: 1672,
-  h: 941,
-  mono: { x: 0.501, y: 0.115, span: 0.22, wspan: 0.16 },
-  couple: { x: 0.5, y: 0.62, span: 0.64, wspan: 0.42 },
-  alt: 'Walima evening in a garden: the couple on a white aisle lined with lanterns and roses, beneath a gold jaali arch with the R|N monogram, chandeliers and fairy lights, family on either side',
-}
-
-// Fairy-light twinkles over the reception trees (deterministic pseudo-random spread).
-const RECEPTION_TWINKLES = (() => {
-  let seed = 7
-  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
-  const pts = []
-  for (let i = 0; i < 40; i++) {
-    const left = i % 2 === 0
-    pts.push([left ? 0.01 + rnd() * 0.26 : 0.73 + rnd() * 0.26, 0.03 + rnd() * 0.4])
-  }
-  return pts
-})()
-
 function NikahScene() {
   return (
     <ZoomScene
@@ -212,18 +190,19 @@ function NikahScene() {
       label="Nikah"
       image={NIKAH_LANDSCAPE}
       portraitImage={NIKAH_PORTRAIT}
+      onCoupleDone={confetti}
       title={
         <div className="zs-panel">
           <p className="zs-eyebrow">
             Aqd-e-Nikah · <span className="ur" lang="ur" dir="rtl">عقدِ نکاح</span>
           </p>
           <p className="zs-h">Nikah</p>
-          <p className="zs-sub">Sunnat-e-Rasool ﷺ ki pakeeza rasm</p>
+          <p className="zs-sub">A blessed Sunnah of the Prophet ﷺ</p>
         </div>
       }
       mono={
         <div className="zs-panel">
-          <p className="zs-eyebrow">Do naam · ek dua</p>
+          <p className="zs-eyebrow">Two names · one prayer</p>
           <p className="zs-script">
             {EVENT.groom} <span>&amp;</span> {EVENT.bride}
           </p>
@@ -241,8 +220,8 @@ function NikahScene() {
             وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا
           </p>
           <p className="zs-quote">
-            &quot;Aur uski nishaniyon mein se hai ki usne tumhare liye tumhi mein se joday banaye, taaki tum unse
-            sukoon pao.&quot;
+            &quot;And among His signs is that He created for you spouses from among yourselves, that you may find
+            tranquillity in them.&quot;
           </p>
           <p className="zs-eyebrow">Surah Ar-Rum · 30:21</p>
         </div>
@@ -264,13 +243,13 @@ function ReceptionScene() {
             Dawat-e-Walima · <span className="ur" lang="ur" dir="rtl">دعوتِ ولیمہ</span>
           </p>
           <p className="zs-h">Walima</p>
-          <p className="zs-sub">Ek shaam, duaon aur roshniyon ke naam</p>
+          <p className="zs-sub">An evening of duas, love and light</p>
         </div>
       }
       mono={
         <div className="zs-panel">
           <p className="zs-eyebrow">Dawat-e-Walima</p>
-          <p className="zs-script">Roshniyon se saji ek shaam</p>
+          <p className="zs-script">An Evening Adorned with Lights</p>
         </div>
       }
       couple={
@@ -278,16 +257,14 @@ function ReceptionScene() {
           <p className="zs-script">
             {EVENT.groom} <span>&amp;</span> {EVENT.bride}
           </p>
-          <p className="zs-meta">Hafta · 19 December 2026 · {EVENT.time}</p>
+          <p className="zs-meta">Saturday · 19 December 2026 · {EVENT.time}</p>
         </div>
       }
       finale={
         <div className="zs-panel">
-          <p className="zs-eyebrow">Aap ki aamad ka intezaar rahega</p>
-          <p className="zs-script">Awaiting You with Open Hearts</p>
-          <p className="zs-meta">
-            {EVENT.venue} · {EVENT.venueAddress}
-          </p>
+          <p className="zs-eyebrow">InshaAllah</p>
+          <p className="zs-script">We Look Forward to Welcoming You</p>
+          <p className="zs-meta">{EVENT.venue} · Adajan Patia, Surat</p>
         </div>
       }
     />
@@ -302,7 +279,7 @@ function Families() {
   return (
     <section className="section families">
       {/* <p className="caption reveal">Ba-ijazat-e-Buzurgaan</p> */}
-      <h3 className="section-title reveal">Duaon Ke Saaye Mein</h3>
+      <h3 className="section-title reveal">With the Blessings of Our Families</h3>
       <div className="reveal">
         <Divider />
       </div>
@@ -346,9 +323,9 @@ function Hero() {
         <svg className="arch-frame" viewBox="0 0 400 600" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="archGrad" x1="0" y1="0" x2="0.3" y2="1">
-              <stop offset="0" stopColor="#15604a" stopOpacity="0.85" />
-              <stop offset="0.55" stopColor="#0b3d2e" stopOpacity="0.8" />
-              <stop offset="1" stopColor="#041d15" stopOpacity="0.9" />
+              <stop offset="0" stopColor="#3d4a2f" stopOpacity="0.85" />
+              <stop offset="0.55" stopColor="#27311e" stopOpacity="0.8" />
+              <stop offset="1" stopColor="#151b11" stopOpacity="0.9" />
             </linearGradient>
           </defs>
           <path className="arch-fill" d="M10 590 V220 Q10 75 200 10 Q390 75 390 220 V590 Z" />
@@ -361,18 +338,19 @@ function Hero() {
         </svg>
         <div className="arch-content">
           <p className="arabic arabic--sm hero-anim">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+          <p className="hero-small hero-anim">In the Name of Allah, the Most Gracious, the Most Merciful</p>
           <h2 className="walima-title hero-anim">Dawat-e-Walima</h2>
           <div className="hero-anim">
             <Divider />
           </div>
           {/* <p className="hero-small hero-anim">Ba-ijazat-e-Buzurgaan</p> */}
           <p className="name hero-anim">{EVENT.groom}</p>
-          <p className="ampersand hero-anim">hamraah</p>
+          <p className="ampersand hero-anim">with</p>
           <p className="name hero-anim">{EVENT.bride}</p>
           <div className="hero-anim">
             <Divider />
           </div>
-          <p className="hero-date hero-anim">Ba-roz Hafta</p>
+          <p className="hero-date hero-anim">InshaAllah · Saturday</p>
           <p className="hero-date hero-date--big hero-anim">19 · December · 2026</p>
         </div>
       </div>
@@ -388,7 +366,7 @@ function Verse() {
     <section className="section verse">
       <p className="arabic reveal">وَخَلَقْنَاكُمْ أَزْوَاجًا</p>
       <p className="translit reveal">Wa khalaqnaakum azwaajaa</p>
-      <p className="quote reveal">"Aur Humne tumhein jode jode paida kiya."</p>
+      <p className="quote reveal">"And We created you in pairs."</p>
       <p className="caption reveal">Surah An-Naba · 78:8</p>
     </section>
   )
@@ -398,18 +376,22 @@ function Invitation() {
   return (
     <section id="invite" className="section card">
       <p className="lead reveal">Assalam-o-Alaikum wa Rahmatullahi wa Barakatuhu</p>
+      <p className="card-hosts reveal">{EVENT.hosts}</p>
+      <p className="body reveal">with the blessings of</p>
+      <p className="card-hosts reveal">{EVENT.elders}</p>
       <p className="body reveal">
-        Allah Rabb-ul-Izzat ke fazl-o-karam se hum nihayat musarrat ke saath aap ko apne azeez
+        cordially request the honour of your presence at the <em>Dawat-e-Walima</em> celebrating the marriage of
+        their beloved son
       </p>
       <p className="card-names reveal">
-        {EVENT.groom} <span>&amp;</span> {EVENT.bride}
+        {EVENT.groom} <span>with</span> {EVENT.bride}
       </p>
-      <p className="body reveal">
-        ki taqreeb-e-walima mein ma&apos;a ahl-o-ayaal shirkat ki pur-khuloos dawat dete hain.
-      </p>
-      <p className="body reveal">
-        Aap ki tashreef aawri aur duayein humare liye <em>baais-e-izzat-o-musarrat</em> hongi.
-      </p>
+      <p className="body body--small reveal">(Daughter of {EVENT.brideParents})</p>
+      {GUEST && (
+        <p className="body reveal">
+          Invitees: <strong>{GUEST}</strong>
+        </p>
+      )}
     </section>
   )
 }
@@ -417,26 +399,26 @@ function Invitation() {
 function Details() {
   return (
     <section className="section details">
-      <h3 className="section-title reveal">Tafseelat-e-Taqreeb</h3>
+      <h3 className="section-title reveal">Event Details</h3>
       <div className="reveal">
         <Divider />
       </div>
       <div className="detail-grid">
         <div className="detail">
           <Star className="detail-icon" />
-          <h4>Ba-Tareekh</h4>
-          <p className="detail-main">Hafta, 19 December 2026</p>
+          <h4>Date</h4>
+          <p className="detail-main">Saturday, 19 December 2026</p>
           <p className="detail-sub">10 Rajab-ul-Murajjab 1448 Hijri</p>
         </div>
         <div className="detail">
           <Star className="detail-icon" />
-          <h4>Ba-Waqt</h4>
+          <h4>Time</h4>
           <p className="detail-main">{EVENT.time}</p>
           <p className="detail-sub">{EVENT.timeEn}</p>
         </div>
         <div className="detail">
           <Star className="detail-icon" />
-          <h4>Ba-Maqaam</h4>
+          <h4>Venue</h4>
           <p className="detail-main">{EVENT.venue}</p>
           <p className="detail-sub">{EVENT.venueAddress}</p>
         </div>
@@ -444,7 +426,7 @@ function Details() {
       <div className="map-frame reveal">
         <iframe
           src={EVENT.mapsEmbed}
-          title={`Naqsha: ${EVENT.venue}, ${EVENT.venueAddress}`}
+          title={`Map: ${EVENT.venue}, ${EVENT.venueAddress}`}
           loading="lazy"
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
@@ -470,15 +452,15 @@ function Countdown() {
   }, [])
 
   const units = [
-    ['Din', t.days],
-    ['Ghante', t.hours],
-    ['Minute', t.minutes],
-    ['Second', t.seconds],
+    ['Days', t.days],
+    ['Hours', t.hours],
+    ['Minutes', t.minutes],
+    ['Seconds', t.seconds],
   ]
 
   return (
     <section className="section countdown">
-      <h3 className="section-title reveal">{t.done ? 'Alhamdulillah! Mubarak Ho' : 'Mubarak Ghadi Mein Baaqi'}</h3>
+      <h3 className="section-title reveal">{t.done ? 'Alhamdulillah! Mubarak!' : 'Counting Down to the Celebration'}</h3>
       {!t.done && (
         <div className="count-grid">
           {units.map(([label, v]) => (
@@ -565,17 +547,19 @@ function Footer() {
       </p>
       <p className="translit reveal">Barakallahu lakuma wa baraka alaikuma wa jama&apos;a bainakuma fi khair</p>
       <p className="quote reveal">
-        "Allah tum dono ko barkat de, tum dono par barkatein nazil farmaye aur tum dono ko khair-o-bhalai par jama
-        rakhe."
+        "May Allah bless you both, shower His blessings upon you, and unite you both in goodness."
       </p>
       <div className="reveal">
         <Divider />
       </div>
-      <p className="footer-line reveal">Awaiting You with Open Hearts</p>
-      <p className="footer-from reveal">
-        Munjanib: <strong>{EVENT.hosts}</strong>
+      <p className="footer-note reveal">
+        Your presence, blessings, and duas will be a cherished part of our celebration.
       </p>
-      <p className="footer-from footer-from--muted reveal">Taalib-e-Dua</p>
+      <p className="footer-from footer-from--muted reveal">With warm regards,</p>
+      <p className="footer-line reveal">{EVENT.family}</p>
+      <p className="footer-from reveal">
+        <strong>{EVENT.hosts}</strong>
+      </p>
       <p className="footer-tag reveal">#RaihanWedsNamira</p>
     </footer>
   )
@@ -585,24 +569,8 @@ function Footer() {
 
 export default function App() {
   const root = useRef(null)
-  const lenisRef = useRef(null)
   const [opened, setOpened] = useState(false)
-
-  // Lenis smooth scroll driven by the GSAP ticker so ScrollTrigger stays in sync
-  useEffect(() => {
-    const lenis = new Lenis({ duration: 1.3, smoothWheel: true })
-    lenisRef.current = lenis
-    lenis.on('scroll', ScrollTrigger.update)
-    const tick = (time) => lenis.raf(time * 1000)
-    gsap.ticker.add(tick)
-    gsap.ticker.lagSmoothing(0)
-    lenis.stop()
-    document.body.classList.add('locked')
-    return () => {
-      gsap.ticker.remove(tick)
-      lenis.destroy()
-    }
-  }, [])
+  const unlockScroll = useSmoothScroll()
 
   useGSAP(
     () => {
@@ -660,57 +628,47 @@ export default function App() {
         ease: 'none',
         scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
       })
-      gsap.to('.page', {
-        backgroundPosition: 'center -240px, 0 0, 0 0',
-        ease: 'none',
-        scrollTrigger: { trigger: '.page', start: 'top top', end: 'bottom bottom', scrub: true },
-      })
-
-      // Generic reveals
-      gsap.utils.toArray('.reveal').forEach((el) => {
-        gsap.from(el, {
-          y: 40,
-          opacity: 0,
-          duration: 1.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%' },
+      // Background drift repaints the whole page every frame — desktop only.
+      if (!IS_TOUCH) {
+        gsap.to('.page', {
+          backgroundPosition: 'center -240px, 0 0, 0 0',
+          ease: 'none',
+          scrollTrigger: { trigger: '.page', start: 'top top', end: 'bottom bottom', scrub: true },
         })
-      })
+      }
+
+      // Reveals: play once, as soon as the element peeks into view.
+      const once = playOnce
+      revealAll()
 
       // Invitation card scales in
-      gsap.from('.card', {
-        scale: 0.92,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.card', start: 'top 85%' },
-      })
+      once(
+        '.card',
+        'top 92%',
+        gsap.from('.card', { scale: 0.95, opacity: 0, duration: 0.8, ease: 'power2.out', paused: true }),
+      )
 
       // Staggered groups
-      gsap.from('.detail', {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.18,
-        ease: 'back.out(1.4)',
-        scrollTrigger: { trigger: '.detail-grid', start: 'top 85%' },
-      })
-      gsap.from('.count', {
-        y: 40,
-        opacity: 0,
-        rotationX: -60,
-        duration: 0.9,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '.count-grid', start: 'top 88%' },
-      })
-      gsap.utils.toArray('.divider-line').forEach((el) => {
-        gsap.from(el, {
-          scaleX: 0,
-          duration: 1.2,
+      once(
+        '.detail-grid',
+        'top 92%',
+        gsap.from('.detail', { y: 36, opacity: 0, duration: 0.7, stagger: 0.1, ease: 'back.out(1.3)', paused: true }),
+      )
+      once(
+        '.count-grid',
+        'top 94%',
+        gsap.from('.count', {
+          y: 24,
+          opacity: 0,
+          rotationX: -50,
+          duration: 0.6,
+          stagger: 0.08,
           ease: 'power2.out',
-          scrollTrigger: { trigger: el, start: 'top 92%' },
-        })
+          paused: true,
+        }),
+      )
+      gsap.utils.toArray('.divider-line').forEach((el) => {
+        once(el, 'top 98%', gsap.from(el, { scaleX: 0, duration: 0.8, ease: 'power2.out', paused: true }))
       })
     },
     { scope: root },
@@ -728,9 +686,7 @@ export default function App() {
 
   const onOpened = () => {
     setOpened(true)
-    document.body.classList.remove('locked')
-    lenisRef.current?.start()
-    ScrollTrigger.refresh()
+    unlockScroll()
   }
 
   return (
@@ -741,6 +697,7 @@ export default function App() {
           groom={EVENT.groom}
           bride={EVENT.bride}
           dateLabel="19 · December · 2026"
+          guest={GUEST}
           onReveal={revealHero}
           onOpened={onOpened}
         />

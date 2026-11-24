@@ -13,6 +13,7 @@
   background-size: cover;
   background-position: center;
   filter: blur(28px) brightness(0.42) saturate(1.15);
+  transform: translateZ(0);
 }
 .zs-cam {
   position: absolute;
@@ -30,14 +31,14 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(4, 29, 21, 0.55), transparent 22%, transparent 75%, rgba(4, 29, 21, 0.6)),
-    radial-gradient(ellipse 85% 85% at 50% 50%, transparent 60%, rgba(4, 29, 21, 0.55));
+    linear-gradient(180deg, rgba(21, 27, 17, 0.55), transparent 22%, transparent 75%, rgba(21, 27, 17, 0.6)),
+    radial-gradient(ellipse 85% 85% at 50% 50%, transparent 60%, rgba(21, 27, 17, 0.55));
 }
 .zs-shade {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 50% 50%, rgba(6, 42, 31, 0.7), rgba(3, 22, 16, 0.88));
+  background: radial-gradient(ellipse at 50% 50%, rgba(28, 36, 23, 0.7), rgba(15, 20, 12, 0.88));
 }
 
 /* fairy-light twinkles laid over the picture */
@@ -99,10 +100,8 @@
   display: inline-block;
   padding: 1.1rem 1.6rem 1.25rem;
   border-radius: 18px;
-  border: 1px solid rgba(212, 175, 106, 0.55);
-  background: linear-gradient(160deg, rgba(14, 74, 55, 0.82), rgba(4, 29, 21, 0.86));
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(201, 166, 94, 0.55);
+  background: linear-gradient(160deg, rgba(52, 64, 40, 0.9), rgba(21, 27, 17, 0.92));
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 .zs-panel p {

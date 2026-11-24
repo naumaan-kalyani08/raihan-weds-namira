@@ -27,12 +27,16 @@ function useOrientation(hasPortrait) {
   return portrait
 }
 
-export default function ZoomScene({ id, label, image, portraitImage, twinkles, title, mono, couple, finale }) {
+export default function ZoomScene({ id, label, image, portraitImage, twinkles, title, mono, couple, finale, onCoupleDone }) {
   const secRef = useRef(null)
   const camRef = useRef(null)
   const portrait = useOrientation(Boolean(portraitImage))
   const img = portrait && portraitImage ? portraitImage : image
   const [still] = useState(reduceMotion)
+  const onCoupleRef = useRef(onCoupleDone)
+  useLayoutEffect(() => {
+    onCoupleRef.current = onCoupleDone
+  })
 
   useLayoutEffect(() => {
     if (still) return
@@ -81,13 +85,13 @@ export default function ZoomScene({ id, label, image, portraitImage, twinkles, t
       duration: d,
     })
 
+    let tl
     const ctx = gsap.context(() => {
       gsap.set(cam, { transformOrigin: '0 0', ...whole() })
       gsap.set(q('.zs-cap'), { opacity: 0, y: 18 })
       gsap.set(q('.zs-shade'), { opacity: 0 })
 
-      gsap
-        .timeline({
+      tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: sec,
@@ -108,6 +112,8 @@ export default function ZoomScene({ id, label, image, portraitImage, twinkles, t
         .to(cam, cam3(toCouple, 2.2), 4.8)
         .to(q('.zs-couple'), { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 6.4)
         .to(q('.zs-couple'), { opacity: 0, y: -14, duration: 0.6 }, 7.8)
+        // couple caption has played out — celebrate (only when scrolling forward)
+        .call(() => tl.scrollTrigger?.direction === 1 && onCoupleRef.current?.(), null, 8.1)
         .to(cam, cam3(whole, 2), 7.8)
         .to(q('.zs-shade'), { opacity: 1, duration: 1.2 }, 8.6)
         .to(q('.zs-finale'), { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 9)

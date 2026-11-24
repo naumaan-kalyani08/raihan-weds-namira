@@ -1,8 +1,19 @@
 /*
- * Deep emerald silk: soft blurred folds of light over a near-black vignette.
+ * Silk background: soft blurred folds of light over a vignette.
  * Static SVG (rendered once), so it costs nothing while scrolling.
+ * `palette` re-colours it (defaults to the Walima olive-forest green).
  */
-export default function Silk({ id = 'silk', className = '' }) {
+const OLIVE = {
+  base: ['#3a472c', '#242d1c', '#10150d', '#070906'],
+  fold: '#4a5836',
+  hi: ['#7f8d5c', '#8f9c6a', '#a7b27f'],
+  shadow: '#000',
+  shadowOpacity: 0.4,
+  vignette: 0.7,
+}
+
+export default function Silk({ id = 'silk', className = '', palette = OLIVE }) {
+  const p = palette || OLIVE
   const f = (n) => `${id}-${n}`
   const waves = [
     'M-100 300 C300 120 620 520 1000 380 S1500 160 1750 260',
@@ -14,20 +25,20 @@ export default function Silk({ id = 'silk', className = '' }) {
     <svg className={className} viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <radialGradient id={f('base')} cx="50%" cy="45%" r="78%">
-          <stop offset="0" stopColor="#0e5c43" />
-          <stop offset="0.42" stopColor="#06382a" />
-          <stop offset="0.8" stopColor="#021710" />
-          <stop offset="1" stopColor="#010906" />
+          <stop offset="0" stopColor={p.base[0]} />
+          <stop offset="0.42" stopColor={p.base[1]} />
+          <stop offset="0.8" stopColor={p.base[2]} />
+          <stop offset="1" stopColor={p.base[3]} />
         </radialGradient>
         <linearGradient id={f('hi')} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#1fa77c" stopOpacity="0" />
-          <stop offset="0.35" stopColor="#28b98a" stopOpacity="0.55" />
-          <stop offset="0.65" stopColor="#35cf9c" stopOpacity="0.5" />
-          <stop offset="1" stopColor="#1fa77c" stopOpacity="0" />
+          <stop offset="0" stopColor={p.hi[0]} stopOpacity="0" />
+          <stop offset="0.35" stopColor={p.hi[1]} stopOpacity="0.55" />
+          <stop offset="0.65" stopColor={p.hi[2]} stopOpacity="0.5" />
+          <stop offset="1" stopColor={p.hi[0]} stopOpacity="0" />
         </linearGradient>
         <radialGradient id={f('vig')} cx="50%" cy="50%" r="72%">
           <stop offset="0.55" stopColor="#000" stopOpacity="0" />
-          <stop offset="1" stopColor="#000" stopOpacity="0.7" />
+          <stop offset="1" stopColor={p.shadow} stopOpacity={p.vignette} />
         </radialGradient>
         <filter id={f('bl')} x="-20%" y="-60%" width="140%" height="220%">
           <feGaussianBlur stdDeviation="45" />
@@ -38,12 +49,18 @@ export default function Silk({ id = 'silk', className = '' }) {
       </defs>
       <rect width="1600" height="1000" fill={`url(#${f('base')})`} />
       {/* broad folds of colour */}
-      <g filter={`url(#${f('bl')})`} fill="none" stroke="#0f7051" strokeOpacity="0.5">
+      <g filter={`url(#${f('bl')})`} fill="none" stroke={p.fold} strokeOpacity="0.5">
         <path d={waves[0]} strokeWidth="170" />
         <path d={waves[1]} strokeWidth="210" strokeOpacity="0.38" />
       </g>
       {/* shadows under the folds */}
-      <g filter={`url(#${f('bs')})`} fill="none" stroke="#000" strokeOpacity="0.4" transform="translate(0 55)">
+      <g
+        filter={`url(#${f('bs')})`}
+        fill="none"
+        stroke={p.shadow}
+        strokeOpacity={p.shadowOpacity}
+        transform="translate(0 55)"
+      >
         {waves.map((d) => (
           <path key={d} d={d} strokeWidth="50" />
         ))}

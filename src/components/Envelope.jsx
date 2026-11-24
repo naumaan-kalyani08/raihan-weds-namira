@@ -15,15 +15,15 @@ function SealArt({ id }) {
     <svg viewBox="0 0 120 120" aria-hidden="true">
       <defs>
         <radialGradient id={g('wax')} cx="36%" cy="30%" r="80%">
-          <stop offset="0" stopColor="#3aa882" />
-          <stop offset="0.3" stopColor="#167455" />
-          <stop offset="0.7" stopColor="#0a4532" />
-          <stop offset="1" stopColor="#03231a" />
+          <stop offset="0" stopColor="#e0c27e" />
+          <stop offset="0.3" stopColor="#b08a45" />
+          <stop offset="0.7" stopColor="#7a5a28" />
+          <stop offset="1" stopColor="#3e2c12" />
         </radialGradient>
         <radialGradient id={g('disc')} cx="58%" cy="62%" r="70%">
-          <stop offset="0" stopColor="#0f5a42" />
-          <stop offset="0.7" stopColor="#083a2b" />
-          <stop offset="1" stopColor="#042419" />
+          <stop offset="0" stopColor="#8a6930" />
+          <stop offset="0.7" stopColor="#6b4f22" />
+          <stop offset="1" stopColor="#3a2a10" />
         </radialGradient>
         <linearGradient id={g('gold')} x1="0" y1="0" x2="0.4" y2="1">
           <stop offset="0" stopColor="#fff3c8" />
@@ -37,11 +37,11 @@ function SealArt({ id }) {
         d="M61 3c8 0 12 4 18 5 7 1 13 0 17 6 4 5 2 11 6 16 4 6 11 9 11 17 0 7-6 10-6 17 0 8 6 13 3 20-3 7-11 6-16 11-5 4-6 12-13 15-7 3-13-2-20-1-8 1-13 8-21 6-7-2-8-10-14-14-6-5-15-5-18-12-3-7 3-13 3-20 0-8-6-12-5-20 1-7 9-9 12-15 4-6 2-14 8-18 6-5 13-1 20-4 7-3 10-9 15-9z"
       />
       {/* soft highlight on the rim */}
-      <path d="M24 34c6-12 18-21 33-23" fill="none" stroke="#7fe0bb" strokeOpacity="0.45" strokeWidth="3" strokeLinecap="round" />
+      <path d="M24 34c6-12 18-21 33-23" fill="none" stroke="#fbe7b2" strokeOpacity="0.45" strokeWidth="3" strokeLinecap="round" />
       {/* pressed disc */}
       <circle cx="60" cy="60" r="38" fill={`url(#${g('disc')})`} />
-      <circle cx="60" cy="60" r="38" fill="none" stroke="#011510" strokeOpacity="0.55" strokeWidth="2.5" />
-      <path d="M33 83a38 38 0 0 0 54 0" fill="none" stroke="#5fcca3" strokeOpacity="0.35" strokeWidth="1.5" />
+      <circle cx="60" cy="60" r="38" fill="none" stroke="#2a1c08" strokeOpacity="0.55" strokeWidth="2.5" />
+      <path d="M33 83a38 38 0 0 0 54 0" fill="none" stroke="#f0d593" strokeOpacity="0.35" strokeWidth="1.5" />
       {/* beaded ring */}
       <circle
         cx="60"
@@ -55,8 +55,8 @@ function SealArt({ id }) {
       />
       {/* embossed monogram: dark offset, light offset, gold face */}
       <g className="seal-mono" textAnchor="middle">
-        <text x="41.5" y="72.6" fill="#011510" opacity="0.6">R</text>
-        <text x="78.5" y="72.6" fill="#011510" opacity="0.6">N</text>
+        <text x="41.5" y="72.6" fill="#2a1c08" opacity="0.6">R</text>
+        <text x="78.5" y="72.6" fill="#2a1c08" opacity="0.6">N</text>
         <text x="40.9" y="71" fill="#fff6d6" opacity="0.5">R</text>
         <text x="77.9" y="71" fill="#fff6d6" opacity="0.5">N</text>
         <text x="41.5" y="71.6" fill={`url(#${g('gold')})`}>R</text>
@@ -92,9 +92,9 @@ function PaperDefs() {
           <stop offset="1" stopColor="#f4ebd6" />
         </linearGradient>
         <linearGradient id="pp-lining" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#0d5a42" />
-          <stop offset="0.6" stopColor="#063a2a" />
-          <stop offset="1" stopColor="#03211a" />
+          <stop offset="0" style={{ stopColor: 'var(--lining-1, #3d4a2f)' }} />
+          <stop offset="0.6" style={{ stopColor: 'var(--lining-2, #27311e)' }} />
+          <stop offset="1" style={{ stopColor: 'var(--lining-3, #151b11)' }} />
         </linearGradient>
         <linearGradient id="pp-foil" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#f3dc9c" />
@@ -110,7 +110,7 @@ function PaperDefs() {
           </g>
         </pattern>
         <pattern id="pp-damask" width="40" height="40" patternUnits="userSpaceOnUse">
-          <g fill="none" stroke="#d4af6a" strokeOpacity="0.22" strokeWidth="1">
+          <g fill="none" stroke="#c9a65e" strokeOpacity="0.22" strokeWidth="1">
             <path d="M20 4 C26 12 26 16 20 20 C14 16 14 12 20 4 M20 36 C14 28 14 24 20 20 C26 24 26 28 20 36 M4 20 C12 14 16 14 20 20 C16 26 12 26 4 20 M36 20 C28 26 24 26 20 20 C24 14 28 14 36 20" />
             <circle cx="20" cy="20" r="2" />
           </g>
@@ -197,7 +197,19 @@ function FlapArt({ back }) {
 
 /* ---------------- Envelope ---------------- */
 
-export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }) {
+export default function Envelope({
+  groom,
+  bride,
+  dateLabel,
+  guest,
+  onReveal,
+  onOpened,
+  title = 'Dawat-e-Walima',
+  joiner = 'with',
+  bismillah = true,
+  className = '',
+  silk,
+}) {
   const root = useRef(null)
   const busy = useRef(false)
 
@@ -296,7 +308,9 @@ export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }
       .to(q('.env-card'), { xPercent: 0, rotationY: 0, duration: 1.3, ease: 'power3.inOut' }, 'forward')
       .to(stage, { x: 0, scale: cardFit, duration: 1.3, ease: 'power3.inOut' }, 'forward')
       .to(q('.env-body, .env-flap'), { y: H * 0.9, rotationX: -30, opacity: 0, duration: 1, ease: 'power2.in' }, 'forward+=0.15')
-      .fromTo(q('.env-card-shine'), { xPercent: -120 }, { xPercent: 120, duration: 1.2, ease: 'power2.inOut' }, 'forward+=0.9')
+      // light sweeps right across the card: starts fully off the left edge, ends fully off the right
+      .set(q('.env-card-shine'), { xPercent: -130, opacity: 1 }, 'forward+=0.9')
+      .to(q('.env-card-shine'), { xPercent: 130, duration: 1.2, ease: 'power2.inOut' }, 'forward+=0.9')
 
       // 5. Hold, then the card zooms past the viewer into the page
       .addLabel('out', '+=1.1')
@@ -313,8 +327,8 @@ export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }
   }
 
   return (
-    <div className="intro" ref={root}>
-      <Silk id="intro-silk" className="intro-silk" />
+    <div className={`intro ${className}`} ref={root}>
+      <Silk id="intro-silk" className="intro-silk" palette={silk} />
       <div className="intro-damask" aria-hidden="true" />
       <div className="intro-sparkles" aria-hidden="true">
         {Array.from({ length: 22 }, (_, i) => (
@@ -323,15 +337,15 @@ export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }
       </div>
       <PaperDefs />
 
-      <p className="arabic arabic--sm env-anim intro-bismillah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-      <p className="intro-to env-anim">Ba-Khidmat Janab-e-Aali</p>
+      {bismillah && <p className="arabic arabic--sm env-anim intro-bismillah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>}
+      <p className="intro-to env-anim">{guest ? `Invitees: ${guest}` : 'You are cordially invited'}</p>
 
       <div className="env-float">
         <div
           className="env-stage"
           role="button"
           tabIndex={0}
-          aria-label={`Dawat nama kholiye — ${groom} & ${bride}`}
+          aria-label={`Open the invitation — ${groom} ${joiner === '&' ? 'and' : joiner} ${bride}`}
           onClick={open}
           onKeyDown={onKey}
         >
@@ -341,14 +355,14 @@ export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }
           {/* the invitation card */}
           <div className="env-card">
             <div className="env-card-inner">
-              <p className="ec-arabic">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+              {bismillah && <p className="ec-arabic">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>}
               <p className="ec-mono">
                 R<i />N
               </p>
-              <p className="ec-title">Dawat-e-Walima</p>
+              <p className="ec-title">{title}</p>
               <p className="ec-names">
                 {groom}
-                <span>&amp;</span>
+                <span>{joiner}</span>
                 {bride}
               </p>
               <p className="ec-date">{dateLabel}</p>
@@ -361,7 +375,7 @@ export default function Envelope({ groom, bride, dateLabel, onReveal, onOpened }
             <div className="env-front">
               <FrontArt />
               <div className="env-front-mark">
-                <small>Dawat Nama</small>
+                <small>{title}</small>
                 <span>{groom}</span>
                 <em>&amp;</em>
                 <span>{bride}</span>

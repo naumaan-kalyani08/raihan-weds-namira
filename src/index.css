@@ -1,14 +1,14 @@
 :root {
-  /* emerald shades: near-black edges, deep body, silky highlights */
-  --green-950: #020d09;
-  --emerald-900: #052a1f;
-  --emerald-800: #0a3d2d;
-  --emerald-700: #0f5a42;
-  --emerald-600: #17795a;
-  --emerald-glow: #28b98a;
-  --gold: #d4af6a;
-  --gold-light: #f1dca7;
-  --gold-dark: #a8853f;
+  /* olive-forest greens, antique gold and ivory — matched to the printed card */
+  --green-950: #0b0f09;
+  --emerald-900: #1c2417;
+  --emerald-800: #27311e;
+  --emerald-700: #3a472c;
+  --emerald-600: #56653f;
+  --emerald-glow: #8f9c6a;
+  --gold: #c9a65e;
+  --gold-light: #ecd8a2;
+  --gold-dark: #9a7a3c;
   --ivory: #fbf6ea;
   --offwhite: #f7f1e3;
   --ink: #2b2a26;
@@ -39,8 +39,10 @@ body {
   overflow-x: hidden;
 }
 
+html.locked,
 body.locked {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 button,

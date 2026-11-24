@@ -18,6 +18,7 @@
   width: 108%;
   height: 108%;
   pointer-events: none;
+  will-change: transform;
 }
 .intro-damask {
   position: absolute;
@@ -41,7 +42,7 @@
   height: 4px;
   border-radius: 50%;
   background: var(--gold-light);
-  box-shadow: 0 0 10px 2px rgba(241, 220, 167, 0.55);
+  box-shadow: 0 0 10px 2px rgba(236, 216, 162, 0.55);
 }
 .env-defs {
   position: absolute;
@@ -88,6 +89,10 @@
 .env-flap {
   position: absolute;
 }
+.env-stage,
+.env-card {
+  will-change: transform;
+}
 .env-back,
 .env-front-wrap {
   inset: 0;
@@ -106,15 +111,15 @@
 .env-back {
   z-index: 1;
   border-radius: 8px;
-  background-color: #063a2a;
+  background-color: #27311e;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23d4af6a' stroke-opacity='0.22'%3E%3Cpath d='M20 4 C26 12 26 16 20 20 C14 16 14 12 20 4 M20 36 C14 28 14 24 20 20 C26 24 26 28 20 36 M4 20 C12 14 16 14 20 20 C16 26 12 26 4 20 M36 20 C28 26 24 26 20 20 C24 14 28 14 36 20'/%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(135deg, #0d5a42, #063a2a 60%, #03211a);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23c9a65e' stroke-opacity='0.22'%3E%3Cpath d='M20 4 C26 12 26 16 20 20 C14 16 14 12 20 4 M20 36 C14 28 14 24 20 20 C26 24 26 28 20 36 M4 20 C12 14 16 14 20 20 C16 26 12 26 4 20 M36 20 C28 26 24 26 20 20 C24 14 28 14 36 20'/%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(135deg, #3d4a2f, #27311e 60%, #151b11);
   background-size: 40px 40px, auto;
   box-shadow:
     0 50px 80px -24px rgba(0, 0, 0, 0.8),
     0 14px 30px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(212, 175, 106, 0.4);
+    inset 0 0 0 1px rgba(201, 166, 94, 0.4);
 }
 
 /* ---------- Card ---------- */
@@ -128,7 +133,7 @@
   overflow: hidden;
   container-type: inline-size;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(212, 175, 106, 0.22), transparent 60%),
+    radial-gradient(ellipse at 50% 0%, rgba(201, 166, 94, 0.22), transparent 60%),
     linear-gradient(160deg, #fffef9, #f9f4e6 55%, #f0e6cd);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
   color: var(--emerald-800);
@@ -199,11 +204,14 @@
   letter-spacing: 0.3em;
   color: var(--gold-dark);
 }
+
 .env-card-shine {
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.7) 50%, transparent 62%);
-  transform: translateX(-120%);
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.75) 50%, transparent 62%);
+  /* hidden until the timeline places it off the left edge; no CSS transform here,
+     or it stacks with GSAP's xPercent and the sweep stops mid-card */
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -255,11 +263,15 @@
   width: 56%;
   height: 100%;
   transform-origin: 100% 50%;
-  filter: drop-shadow(-7px 5px 9px rgba(40, 28, 8, 0.38));
+  will-change: transform;
 }
 .flap-face {
   position: absolute;
   inset: 0;
+}
+/* shadow lives on the static artwork, so it is painted once into the flap's layer */
+.flap-face--front svg {
+  filter: drop-shadow(-7px 5px 9px rgba(40, 28, 8, 0.38));
 }
 .flap-face--back,
 .env-flap.is-back .flap-face--front {
@@ -283,7 +295,7 @@
   position: absolute;
   inset: -4%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(241, 220, 167, 0.55) 40%, rgba(241, 220, 167, 0) 70%);
+  background: radial-gradient(circle, rgba(236, 216, 162, 0.55) 40%, rgba(236, 216, 162, 0) 70%);
   pointer-events: none;
 }
 .seal-whole,
@@ -322,7 +334,7 @@
 }
 .seal-crack path {
   fill: none;
-  stroke: #010d09;
+  stroke: #1f1506;
   stroke-width: 1.6;
   stroke-linejoin: round;
   stroke-dasharray: 1;
@@ -355,12 +367,12 @@
   height: 14px;
   border-radius: 50%;
   background: var(--gold);
-  box-shadow: 0 0 0 0 rgba(212, 175, 106, 0.6);
+  box-shadow: 0 0 0 0 rgba(201, 166, 94, 0.6);
   animation: tapPulse 1.8s ease-out infinite;
 }
 @keyframes tapPulse {
   to {
-    box-shadow: 0 0 0 18px rgba(212, 175, 106, 0);
+    box-shadow: 0 0 0 18px rgba(201, 166, 94, 0);
   }
 }
 
